@@ -28,8 +28,3 @@ python_files = ["test*.py", "*test.py", "testing/python/*.py"]
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.flake8]
-exclude = [".git", ".venv", "__pycache", "migrations", "tests", "build", "dist"]
-max-complexity = 10
-max-line-length = 150
