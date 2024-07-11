@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "django-template"
 version = "0.1.0"
-description = "Template de prjeto Django com as boas práticas da DevPro"
+description = "Template de projeto Django com as boas práticas da DevPro"
 authors = ["Gustavo Junior dos Santos <gustavojuniordos@hotmail.com>"]
 license = "MIT"
 readme = "README.md"
@@ -13,6 +13,8 @@ python-decouple = "^3.8"
 dj-database-url = "^2.2.0"
 psycopg2-binary = "^2.9.9"
 
+[tool.poetry.group.dev]
+optional = true
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.2"
