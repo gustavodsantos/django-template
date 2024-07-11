@@ -1,3 +1,4 @@
 DEBUG=False
+SECRET_KEY=chave secreta
 ALLOWED_HOSTS=localhost,127.0.0.1
-DATABASE_URL=postgresql://core:core@localhost:15432/db_core
+DATABASE_URL=postgres://core:core@localhost:15432/db_core

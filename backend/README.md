@@ -7,7 +7,7 @@ Será usado o Poetry como gestor pacotes.
 Por isso, para instalar o projeto, dentro das pasta backend rode
 
 ``
-poetry install --sync
+poetry install --with dev
 ``
 
 Para rodar seu servidor Django ative o ambiente virtual:
