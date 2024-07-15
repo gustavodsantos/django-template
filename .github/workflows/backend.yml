@@ -32,10 +32,6 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Copying configurations
-        run: |
-          cp contrib/env-sample .env
-
       - name: Install dependencies (using poetry)
         run: |
           python -m pip install --upgrade pip
@@ -44,6 +40,9 @@ jobs:
 
       - name: Run Python Linter
         run: poetry run flake8
+
+      - name: Copy instance config variables
+        run: cp ../config/env-sample .env
 
       - name: Run backend Tests
         run: poetry run pytest --cache-clear
