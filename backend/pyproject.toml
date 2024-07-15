@@ -5,6 +5,7 @@ description = "Template de projeto Django com as boas práticas da DevPro"
 authors = ["Gustavo Junior dos Santos <gustavojuniordos@hotmail.com>"]
 license = "MIT"
 readme = "README.md"
+packages = [{ include = "devpro" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
