@@ -12,7 +12,7 @@ python = "^3.11"
 django = "^5.0.6"
 python-decouple = "^3.8"
 dj-database-url = "^2.2.0"
-psycopg2-binary = "^2.9.9"
+psycopg2 = "^2.9.9"
 
 [tool.poetry.group.dev]
 optional = true
@@ -24,7 +24,7 @@ flake8 = "^7.1.0"
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "devpro.settings"
-python_files = ["test*.py", "*test.py", "testing/python/*.py"]
+python_files = ["test_*.py", "*_test.py", "testing/python/*.py"]
 
 [build-system]
 requires = ["poetry-core"]
