@@ -9,18 +9,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: backend  # Set the global working directory
-
     services:
       postgres:
-        image: postgres:15-alpine
+        image: postgres:16.3
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
-        ports: [ '15432:5432' ]
+        ports: [ '5433:5432' ]
+
+    defaults:
+      run:
+        working-directory: backend  # Set the global working directory
 
     steps:
       - uses: actions/checkout@v3
@@ -42,7 +42,7 @@ jobs:
         run: poetry run flake8
 
       - name: Copy instance config variables
-        run: cp ../config/env-sample .env
+        run: cp config/env-sample .env
 
       - name: Run backend Tests
         run: poetry run pytest --cache-clear
