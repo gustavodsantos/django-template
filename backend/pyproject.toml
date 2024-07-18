@@ -8,11 +8,12 @@ readme = "README.md"
 packages = [{ include = "devpro" }]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.12"
 django = "^5.0.6"
 python-decouple = "^3.8"
 dj-database-url = "^2.2.0"
 psycopg2 = "^2.9.9"
+django-min-custom-user = "^0.2.0"
 
 [tool.poetry.group.dev]
 optional = true
