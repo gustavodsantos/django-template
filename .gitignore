@@ -131,7 +131,7 @@ env.bak/
 venv.bak/
 
 #Postgres local volume
-docker/.pgdata/
+backend/docker/.pgdata/
 
 # Spyder project settings
 .spyderproject
