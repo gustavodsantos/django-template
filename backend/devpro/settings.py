@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -108,6 +109,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
+LOGOUT_REDIRECT_URL = LOGIN_REDIRECT_URL = '/'
+
 LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'America/Sao_Paulo'
@@ -120,26 +123,61 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+if DEBUG:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME', default='').strip()
 
-if AWS_STORAGE_BUCKET_NAME == '':
-    # Configuração para coletar estáticos para o Nginx
-    STATIC_URL = 'static/'
-    STATIC_ROOT = BASE_DIR.parent / 'docker/staticfiles/static'
-else:
-    STATIC_URL = f'//{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/'
+# Defining function to be able to test it
 
-    AWS_S3_ACCESS_KEY_ID = config('AWS_S3_ACCESS_KEY_ID')
-    AWS_S3_SECRET_ACCESS_KEY = config('AWS_S3_SECRET_ACCESS_KEY')
-    STORAGES = {
-        "staticfiles": {
-            "BACKEND": "storages.backends.s3.S3Storage",
-            "OPTIONS": {
-                'default_acl': 'public-read',
-                'location': 'static',
+
+def configure_storage(has_s3_bucket: bool):
+    global STATIC_URL, STORAGES
+    if not has_s3_bucket:
+        global STATIC_ROOT, MEDIA_ROOT, MEDIA_URL
+        # Muda a configuração de upload de arquivos locais para bater com produção
+        # Configuração para coletar estáticos para o Nginx
+        STATIC_URL = 'static/'
+        STATIC_ROOT = BASE_DIR.parent / 'docker/staticfiles/static'
+        MEDIA_ROOT = BASE_DIR.parent / 'docker/mediafiles'
+        MEDIA_URL = '/mediafiles/'
+        # Muda a configuração de upload de arquivos locais para bater com produção
+        STORAGES = {
+            "default": {
+                "BACKEND": "devpro_s3_storages.handlers.FileSystemWithValidationStorage",
             },
-        },
-    }
+            "staticfiles": {
+                "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+            },
+        }
+    else:
+        global AWS_S3_ACCESS_KEY_ID, AWS_S3_SECRET_ACCESS_KEY
+
+        STATIC_URL = f'//{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/'
+
+        AWS_S3_ACCESS_KEY_ID = config('AWS_S3_ACCESS_KEY_ID')
+        AWS_S3_SECRET_ACCESS_KEY = config('AWS_S3_SECRET_ACCESS_KEY')
+        STORAGES = {
+            "default": {
+                "BACKEND": "devpro_s3_storages.handlers.S3FileStorage",
+                "OPTIONS": {
+                    'default_acl': 'private',
+                    'location': 'media',
+                },
+            },
+            "staticfiles": {
+                "BACKEND": "storages.backends.s3.S3Storage",
+                "OPTIONS": {
+                    'default_acl': 'public-read',
+                    'location': 'static',
+                    'querystring_auth': False
+                },
+            },
+        }
+
+
+configure_storage(AWS_STORAGE_BUCKET_NAME == '')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
