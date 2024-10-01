@@ -178,7 +178,6 @@ def configure_storage(has_s3_bucket: bool):
 
 configure_storage(AWS_STORAGE_BUCKET_NAME == '')
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
