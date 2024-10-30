@@ -26,12 +26,36 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.2"
 pytest-django = "^4.8.0"
-flake8 = "^7.1.0"
 pytest-cov = "^5.0.0"
+ruff = "^0.7.1"
+taskipy = "^1.14.0"
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "devpro.settings"
 python_files = ["test_*.py", "*_test.py", "testing/python/*.py"]
+
+[tool.ruff]
+line-length=120
+exclude = ['./devpro/base/migrations']
+
+[tool.ruff.lint]
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+ignore = ["PLR2004", "PLW0603"]
+
+[tool.ruff.format]
+quote-style = 'single'
+
+[tool.taskipy.tasks]
+lint = 'ruff check . && ruff check . --diff'
+
+format = 'ruff check . --fix && ruff format .'
+
+run = 'python manage.py runserver'
+
+pre_test = 'task lint'
+test = 'pytest devpro/ -s -x --cov=devpro -vv'
+post_test = 'coverage html'
+
 
 [build-system]
 requires = ["poetry-core"]
